@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package net.sourceforge.czt.java_cup.maven;
+package org.shortbus.java_cup.maven;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import net.sourceforge.czt.java_cup.Main;
+import java_cup.Main;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -87,10 +87,11 @@ public class Plugin
       String className = file.getName().replaceAll(".cup", "");
       try {
         String packageName = getPackage(file);
-        String destdir = outputDirectory + fileSep +
-          packageName.replace(".", fileSep);
+        // String destdir = outputDirectory + fileSep +
+        //   packageName.replace(".", fileSep);
+        String destdir = outputDirectory;
         File destDir = new File(destdir);
-        File destFile = new File(destDir, className + ".java");
+        File destFile = new File(destDir, "parser.java");
         getLog().debug("CUP: Checking file dates:\n\t" + new Date(destFile.lastModified()) + 
           "= " + destFile + "\n\t" + new Date(file.lastModified()) + "= " +
           file);
@@ -106,8 +107,8 @@ public class Plugin
           if (dumpTables) {args.add("-dump_tables");}
           args.addAll(Arrays.asList("-destdir", destdir,
                                    "-package", packageName,
-                                   "-parser", className,
-                                   "-symbols", "Sym",
+                                   "-parser", "parser",
+                                   "-symbols", "sym",
                                    file.getPath()));
           Main.main(args.toArray(new String[0]));
         }
@@ -133,7 +134,7 @@ public class Plugin
     if (content == null) return;
     for (File file : content) {
       if (file.isDirectory()) collectGrammarFiles(file, list);
-      else list.add(file);
+      else if (file.getName().endsWith(".cup")) list.add(file);
     }
   }
 
