@@ -65,6 +65,11 @@ public class Plugin
    * @parameter 
    */
   private boolean dumpTables;
+
+  /**
+   * @parameter
+   */
+  private int expectConflicts;
   
   /**
    * @parameter expression="${project}"
@@ -109,6 +114,7 @@ public class Plugin
                                    "-package", packageName,
                                    "-parser", "parser",
                                    "-symbols", "sym",
+                                   "-expect", String.valueOf(expectConflicts),
                                    file.getPath()));
           Main.main(args.toArray(new String[0]));
         }
